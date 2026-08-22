@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I Love You ❤️</title>
+    <style>
+        html, body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: black;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<canvas id="heartCanvas"></canvas>
+
+<script>
+const canvas = document.getElementById("heartCanvas");
+const ctx = canvas.getContext("2d");
+
+function resizeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+    canvas.style.width = window.innerWidth + "px";
+    canvas.style.height = window.innerHeight + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+const scale = Math.min(window.innerWidth, window.innerHeight) / 32;
+const centerX = window.innerWidth / 2;
+const centerY = window.innerHeight / 2;
+
+ctx.textAlign = "center";
+ctx.textBaseline = "middle";
+ctx.font = "bold 8px Arial";
+ctx.fillStyle = "#ffb6c1";
+
+let currentScale = 11;
+let i = 0;
+
+function draw() {
+    if (currentScale > 16) return;
+
+    const angle = i * (Math.PI * 2) / 120;
+
+    const x = 16 * Math.pow(Math.sin(angle), 3) * currentScale;
+    const y = (
+        13 * Math.cos(angle)
+        - 5 * Math.cos(2 * angle)
+        - 2 * Math.cos(3 * angle)
+        - Math.cos(4 * angle)
+    ) * currentScale;
+
+    ctx.fillText(
+        "I love you",
+        centerX + x * scale / 16,
+        centerY - y * scale / 16
+    );
+
+    i++;
+
+    if (i >= 120) {
+        i = 0;
+        currentScale++;
+    }
+
+    requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+</body>
+</html>
